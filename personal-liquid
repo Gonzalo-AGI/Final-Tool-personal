@@ -7,7 +7,7 @@
 <link rel="stylesheet" href="{{ 'radial-sliders-personal.css' | asset_url }}" />
 
 <section class="radial-sliders-wrapper page-container">
-  <h1>Personal Questions</h1>
+  <h1>Preguntas Personales</h1>
   <div class="radar-container">
     <div class="radar-background"></div>
     <svg class="radar-svg" viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
