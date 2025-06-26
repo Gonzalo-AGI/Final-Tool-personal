@@ -1,1 +1,272 @@
+{% comment %}
+  sections/radial-sliders-personal.liquid
+  Personal Questions – Radial Sliders section.
+  Clockwise: Mind, Emotional, Body, Spirit
+{% endcomment %}
+
+<link rel="stylesheet" href="{{ 'radial-sliders-personal-spanish.css' | asset_url }}" />
+
+<section class="radial-sliders-wrapper page-container">
+  <h1>Personal Questions</h1>
+  <div class="radar-container">
+    <div class="radar-background"></div>
+    <svg class="radar-svg" viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <!-- Radar shape -->
+        <path id="mainCirclePath" d="M 200,0 A 200,200 0 1,1 199.9,0" fill="none" />
+
+        <!-- Individual arcs for curved labels -->
+        <path id="labelPath1" d="M200 -30 A230 230 0 0 1 430 200" />
+        <path id="labelPath2" d="M430 200 A230 230 0 0 1 200 430" />
+        <path id="labelPath3" d="M200 430 A230 230 0 0 1 -30 200" />
+        <path id="labelPath4" d="M-30 200 A230 230 0 0 1 200 -30" />
+      </defs>
+
+      <g class="ticks-group"></g>
+      <polygon class="radar-polygon" points="" />
+
+      <!-- Labels on curves -->
+      <text font-size="14" font-weight="600" fill="#1c1c1e">
+        <textPath href="#labelPath1" startOffset="50%" text-anchor="middle">Mentalidad</textPath>
+      </text>
+      <text font-size="14" font-weight="600" fill="#1c1c1e">
+        <textPath href="#labelPath2" startOffset="50%" text-anchor="middle">Emocional</textPath>
+      </text>
+      <text font-size="14" font-weight="600" fill="#1c1c1e">
+        <textPath href="#labelPath3" startOffset="50%" text-anchor="middle">Cuerpo</textPath>
+      </text>
+      <text font-size="14" font-weight="600" fill="#1c1c1e">
+        <textPath href="#labelPath4" startOffset="50%" text-anchor="middle">Espiritu</textPath>
+      </text>
+    </svg>
+
+    <!-- Radial slider containers -->
+    <div class="radial-slider" id="radial1">
+      <input type="range" min="1" max="10" value="10" data-angle="270" id="slider1" oninput="onSliderInput(this)" />
+    </div>
+    <div class="radial-slider" id="radial2">
+      <input type="range" min="1" max="10" value="10" data-angle="0" id="slider2" oninput="onSliderInput(this)" />
+    </div>
+    <div class="radial-slider" id="radial3">
+      <input type="range" min="1" max="10" value="10" data-angle="90" id="slider3" oninput="onSliderInput(this)" />
+    </div>
+    <div class="radial-slider" id="radial4">
+      <input type="range" min="1" max="10" value="10" data-angle="180" id="slider4" oninput="onSliderInput(this)" />
+    </div>
+
+    <!-- Custom thumbs -->
+    <div class="custom-thumb" id="thumb1">10</div>
+    <div class="custom-thumb" id="thumb2">10</div>
+    <div class="custom-thumb" id="thumb3">10</div>
+    <div class="custom-thumb" id="thumb4">10</div>
+  </div>
+
+  <!-- LINEAR SLIDERS -->
+  <div class="skill-list">
+    <div class="skill-item">
+      <label for="linear1">Mentalidad:</label>
+      <input id="linear1" type="range" min="1" max="10" value="10" data-angle="270" oninput="syncFromLinear(this)" />
+      <div class="value-display" id="linearValue1">10</div>
+    </div>
+    <div class="skill-item">
+      <label for="linear2">Emocional:</label>
+      <input id="linear2" type="range" min="1" max="10" value="10" data-angle="0" oninput="syncFromLinear(this)" />
+      <div class="value-display" id="linearValue2">10</div>
+    </div>
+    <div class="skill-item">
+      <label for="linear3">Cuerpo:</label>
+      <input id="linear3" type="range" min="1" max="10" value="10" data-angle="90" oninput="syncFromLinear(this)" />
+      <div class="value-display" id="linearValue3">10</div>
+    </div>
+    <div class="skill-item">
+      <label for="linear4">Espiritu:</label>
+      <input id="linear4" type="range" min="1" max="10" value="10" data-angle="180" oninput="syncFromLinear(this)" />
+      <div class="value-display" id="linearValue4">10</div>
+    </div>
+  </div>
+</section>
+
+<script src="{{ 'radial-sliders-personal-spanish.js' | asset_url }}"></script>
+
+{% if section.blocks.size > 0 %}
+  <div class="radial-question-cards-personal-wrapper">
+    <div class="radial-question-cards-personal-container">
+      {% for block in section.blocks %}
+        <div class="radial-question-card-personal" style="text-align: {{ block.settings.headline_align }};">
+
+          {% if block.settings.icon_image != blank %}
+            <img src="{{ block.settings.icon_image | image_url: width: 64 }}" class="radial-hover-card-icon" alt="Icon">
+          {% endif %}
+
+          {%- assign highlighted_keywords = block.settings.highlight_keywords | split: ',' -%}
+          {%- assign processed_headline = block.settings.headline -%}
+          {%- for keyword in highlighted_keywords -%}
+            {%- assign trimmed = keyword | strip -%}
+            {%- if trimmed != blank -%}
+              {%- if block.settings.highlight_gradient_1 != blank and block.settings.highlight_gradient_2 != blank -%}
+                {%- assign replacement = '<span class="radial-highlighted-keyword gradient" style="font-size:' 
+                  | append: block.settings.highlight_size 
+                  | append: 'px; font-weight:' 
+                  | append: block.settings.highlight_weight 
+                  | append: '; background: linear-gradient(to right, ' 
+                  | append: block.settings.highlight_gradient_1 
+                  | append: ', ' 
+                  | append: block.settings.highlight_gradient_2 
+                  | append: '); -webkit-background-clip: text; color: transparent;">' 
+                  | append: trimmed 
+                  | append: '</span>' -%}
+              {%- else -%}
+                {%- assign replacement = '<span class="radial-highlighted-keyword solid" style="font-size:' 
+                  | append: block.settings.highlight_size 
+                  | append: 'px; font-weight:' 
+                  | append: block.settings.highlight_weight 
+                  | append: '; color:' 
+                  | append: block.settings.highlight_color 
+                  | append: ';">' 
+                  | append: trimmed 
+                  | append: '</span>' -%}
+              {%- endif -%}
+              {%- assign processed_headline = processed_headline | replace: trimmed, replacement -%}
+            {%- endif -%}
+          {%- endfor -%}
+
+          <h3 class="radial-hover-card-headline"
+              style="
+                font-size: {{ block.settings.headline_size }}px;
+                font-weight: {{ block.settings.headline_bold }};
+                text-align: {{ block.settings.headline_align }};
+                margin-top: {{ block.settings.headline_margin_top }}px;
+                margin-bottom: {{ block.settings.headline_margin_bottom }}px;
+                {% unless highlighted_keywords.size > 0 %}
+                  {% if block.settings.headline_gradient_1 != blank and block.settings.headline_gradient_2 != blank %}
+                    background: linear-gradient(90deg, {{ block.settings.headline_gradient_1 }}, {{ block.settings.headline_gradient_2 }});
+                    -webkit-background-clip: text;
+                    -webkit-text-fill-color: transparent;
+                  {% else %}
+                    color: {{ block.settings.headline_color }};
+                  {% endif %}
+                {% endunless %}
+              ">
+            {{ processed_headline | raw }}
+          </h3>
+
+          {% if block.settings.description != blank %}
+            <p class="radial-hover-card-description"
+               style="
+                 font-size: {{ block.settings.description_size }}px;
+                 font-weight: {{ block.settings.description_weight }};
+                 text-align: {{ block.settings.description_align }};
+                 margin-top: {{ block.settings.description_margin_top }}px !important;
+                 margin-bottom: {{ block.settings.description_margin_bottom }}px !important;
+                 {% if block.settings.description_gradient_1 != blank and block.settings.description_gradient_2 != blank %}
+                   background: linear-gradient(to right, {{ block.settings.description_gradient_1 }}, {{ block.settings.description_gradient_2 }});
+                   -webkit-background-clip: text;
+                   color: transparent;
+                 {% else %}
+                   color: {{ block.settings.description_color }};
+                 {% endif %}
+               ">
+              {{ block.settings.description | newline_to_br }}
+            </p>
+          {% endif %}
+
+          {% if block.settings.link_url != blank and block.settings.link_label != blank %}
+            <a href="{{ block.settings.link_url }}" target="_blank" class="radial-hover-card-cta">
+              {{ block.settings.link_label }}
+            </a>
+          {% endif %}
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+{% endif %}
+
+<div id="highest-score-summary" style="margin-top: 30px; text-align: center; display: flex; justify-content: center;">
+  <div style="font-size: 1.2rem; font-weight: bold;">
+    Lowest Area: <span id="top-skill-name">—</span> (<span id="top-skill-percent">0%</span>)
+  </div>
+</div>
+
+<!-- LOWEST SKILL CARD -->
+<div id="lowest-skill-card" class="skill-card" style="margin-top: 30px; text-align: center; display: none;">
+  <div id="lowest-skill-title" style="font-size: 1.2rem; font-weight: bold; margin-bottom: 12px;"></div>
+  <ul id="lowest-skill-bullets" style="list-style-type: disc; padding-left: 20px; text-align: left; max-width: 400px; margin: 0 auto;"></ul>
+</div>
+
+{% schema %}
+{
+  "name": "Radial Sliders – Personal",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "enable_modal_popup",
+      "label": "Enable Modal Popups on Card Click",
+      "default": true
+    }
+  ],
+  "blocks": [
+    {
+      "type": "card",
+      "name": "Card",
+      "settings": [
+        { "type": "image_picker", "id": "icon_image", "label": "Icon Image" },
+        { "type": "text", "id": "headline", "label": "Headline", "default": "Do more with Mac." },
+        { "type": "color", "id": "headline_color", "label": "Headline Solid Color", "default": "#000000" },
+        { "type": "color", "id": "headline_gradient_1", "label": "Headline Gradient Start" },
+        { "type": "color", "id": "headline_gradient_2", "label": "Headline Gradient End" },
+        { "type": "range", "id": "headline_size", "label": "Headline Font Size", "min": 14, "max": 40, "step": 1, "default": 22 },
+        { "type": "select", "id": "headline_bold", "label": "Headline Weight", "default": "700", "options": [ { "value": "400", "label": "Normal" }, { "value": "600", "label": "Semi-bold" }, { "value": "700", "label": "Bold" } ] },
+        { "type": "select", "id": "headline_align", "label": "Headline Alignment", "default": "center", "options": [ { "value": "left", "label": "Left" }, { "value": "center", "label": "Center" }, { "value": "right", "label": "Right" } ] },
+        { "type": "range", "id": "headline_margin_top", "label": "Headline Margin Top", "min": 0, "max": 60, "step": 2, "default": 10 },
+        { "type": "range", "id": "headline_margin_bottom", "label": "Headline Margin Bottom", "min": 0, "max": 60, "step": 2, "default": 10 },
+        { "type": "text", "id": "highlight_keywords", "label": "Highlight Keywords (comma-separated)", "default": "Business,Money,Team" },
+        { "type": "range", "id": "highlight_size", "label": "Highlight Font Size", "min": 10, "max": 60, "step": 1, "default": 24 },
+        { "type": "select", "id": "highlight_weight", "label": "Highlight Font Weight", "default": "700", "options": [ { "value": "400", "label": "Normal" }, { "value": "500", "label": "Medium" }, { "value": "700", "label": "Bold" } ] },
+        { "type": "color", "id": "highlight_color", "label": "Highlight Solid Color", "default": "#d1005d" },
+        { "type": "color", "id": "highlight_gradient_1", "label": "Highlight Gradient Start" },
+        { "type": "color", "id": "highlight_gradient_2", "label": "Highlight Gradient End" },
+        { "type": "textarea", "id": "description", "label": "Card Description", "default": "Learn how to express your creativity with Apple tools." },
+        { "type": "select", "id": "description_align", "label": "Description Alignment", "default": "center", "options": [ { "value": "left", "label": "Left" }, { "value": "center", "label": "Center" }, { "value": "right", "label": "Right" } ] },
+        { "type": "range", "id": "description_margin_top", "label": "Description Margin Top", "min": 0, "max": 60, "step": 2, "default": 10 },
+        { "type": "range", "id": "description_margin_bottom", "label": "Description Margin Bottom", "min": 0, "max": 60, "step": 2, "default": 10 },
+        { "type": "color", "id": "description_color", "label": "Description Solid Color", "default": "#333333" },
+        { "type": "color", "id": "description_gradient_1", "label": "Description Gradient Start" },
+        { "type": "color", "id": "description_gradient_2", "label": "Description Gradient End" },
+        { "type": "select", "id": "description_weight", "label": "Description Weight", "default": "400", "options": [ { "value": "400", "label": "Normal" }, { "value": "500", "label": "Medium" }, { "value": "700", "label": "Bold" } ] },
+        { "type": "range", "id": "description_size", "label": "Description Font Size", "min": 10, "max": 30, "step": 1, "default": 16 },
+        { "type": "text", "id": "link_label", "label": "CTA Label", "default": "Learn more" },
+        { "type": "url", "id": "link_url", "label": "CTA Link" },
+        { "type": "textarea", "id": "modal_description", "label": "Modal Description" },
+        { "type": "color", "id": "modal_description_color", "label": "Modal Description Color", "default": "#333333" },
+        { "type": "color", "id": "modal_description_gradient_1", "label": "Modal Description Gradient Start" },
+        { "type": "color", "id": "modal_description_gradient_2", "label": "Modal Description Gradient End" },
+        { "type": "select", "id": "modal_description_weight", "label": "Modal Description Weight", "default": "400", "options": [ { "value": "400", "label": "Normal" }, { "value": "500", "label": "Medium" }, { "value": "700", "label": "Bold" } ] },
+        { "type": "range", "id": "modal_description_size", "label": "Modal Description Font Size", "min": 10, "max": 30, "step": 1, "default": 16 },
+        { "type": "select", "id": "modal_description_align", "label": "Modal Description Alignment", "default": "center", "options": [ { "value": "left", "label": "Left" }, { "value": "center", "label": "Center" }, { "value": "right", "label": "Right" } ] },
+        { "type": "image_picker", "id": "modal_image", "label": "Modal Image" },
+        { "type": "textarea", "id": "modal_quote", "label": "Modal Quote" },
+        { "type": "color", "id": "modal_quote_color", "label": "Modal Quote Color", "default": "#000000" },
+        { "type": "color", "id": "modal_quote_gradient_1", "label": "Modal Quote Gradient Start" },
+        { "type": "color", "id": "modal_quote_gradient_2", "label": "Modal Quote Gradient End" },
+        { "type": "select", "id": "modal_quote_weight", "label": "Modal Quote Weight", "default": "400", "options": [ { "value": "400", "label": "Normal" }, { "value": "500", "label": "Medium" }, { "value": "700", "label": "Bold" } ] },
+        { "type": "range", "id": "modal_quote_size", "label": "Modal Quote Font Size", "min": 10, "max": 30, "step": 1, "default": 16 },
+        { "type": "select", "id": "modal_quote_align", "label": "Modal Quote Alignment", "default": "center", "options": [ { "value": "left", "label": "Left" }, { "value": "center", "label": "Center" }, { "value": "right", "label": "Right" } ] },
+        { "type": "range", "id": "modal_headline_size", "label": "Modal Headline Font Size", "min": 14, "max": 40, "step": 1, "default": 26 },
+        { "type": "select", "id": "modal_headline_align", "label": "Modal Headline Alignment", "default": "left", "options": [ { "value": "left", "label": "Left" }, { "value": "center", "label": "Center" }, { "value": "right", "label": "Right" } ] }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Radial Sliders Personal",
+      "category": "Custom",
+      "blocks": [
+        { "type": "card" },
+        { "type": "card" },
+        { "type": "card" }
+      ]
+    }
+  ]
+}
+{% endschema %}
 
